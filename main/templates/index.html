@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}My main App{% endblock %}
+
+{% block content %}
+<!--Filter-->
+<div class="container">
+  <form action="" method="GET">
+    <div class="form-group">
+      <label for="your_agen">Agency: </label>
+      <select class="form-control" id="your_agen" name="your_agen">
+        <option selected></option>
+        {% for item in context.agencies %}
+        <option value="{{ item }}">{{ item }}</option>
+        {% endfor %}
+      </select>
+      <label for="your_date">Date: </label>
+      <input class="form-control" id="your_date" type="date" name="your_date">
+    </div>
+    <div class="form-group">
+      <input class="btn btn-primary" type="submit" value="Submit">
+      <a class="btn btn-primary" href="/" role="button">Cancel</a>
+    </div>
+  </form>
+</div>
+
+<!--Table-->
+<div class="container">
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Customer</th>
+          <th>Lastname</th>
+          <th>Firstname</th>
+          <th>Last Order Date</th>
+          <th>Number of Orders</th>
+          <th>Agency</th>
+          <th>Phone</th>
+          <th>Address</th>
+          <th>City</th>
+          <th>Country</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for item in context.customers %}
+        <tr>
+          {% for key, value in item.items %}
+          <td>{{ value }}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!--Pagination-->
+<div class="container">
+  <nav aria-label="Page navigation">
+    {% if context.customers.has_other_pages %}
+      <ul class="pagination justify-content-center">
+        {% if context.customers.has_previous %}
+          <li class="page-item"><a class="page-link" href="?page={{ context.customers.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+          <li class="page-item disabled"><a class="page-link" href="">&laquo;</a></li>
+        {% endif %}
+
+        {% if context.customers.number|add:'-4' > 1 %}
+            <li class="page-item"><a class="page-link" href="?page={{ context.customers.number|add:'-5' }}">&hellip;</a></li>
+        {% endif %}
+
+        {% for i in context.customers.paginator.page_range %}
+            {% if context.customers.number == i %}
+              <li class="page-item active"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% elif i > context.customers.number|add:'-5' and i < context.customers.number|add:'5' %}
+              <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+        {% if context.customers.paginator.num_pages > context.customers.number|add:'4' %}
+           <li class="page-item"><a class="page-link" href="?page={{ context.customers.number|add:'5' }}">&hellip;</a></li>
+        {% endif %}
+
+        {% if context.customers.has_next %}
+          <li class="page-item"><a class="page-link" href="?page={{ context.customers.next_page_number }}">&raquo;</a></li>
+        {% else %}
+          <li class="page-item disabled"><a class="page-link" href="">&raquo;</a></li>
+        {% endif %}
+      </ul>
+    {% endif %}
+  </nav>
+</div>
+
+{% endblock %}

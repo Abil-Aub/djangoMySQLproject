@@ -26,4 +26,7 @@
 <p>Two filters (agency, date).</p>
 <p>Customers table.</p>
 <p>Pagination.</p>
-  
+
+
+<h2>DATABASE</h2>
+Datas are taken from remote database. Unfortunately it is NOT stable.
